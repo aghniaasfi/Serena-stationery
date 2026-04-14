@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serena Stationery</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg,#fdfbff,#f3e8ff);
+    margin: 0;
+}
+
+.header {
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg,#ffd6e0,#cde7ff,#e4c1f9);
+    border-radius: 0 0 30px 30px;
+}
+
+.gradient-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 600;
+    background: linear-gradient(90deg,#d98bb0,#9fb6f5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 1px;
+}
+
+.sub-gradient {
+    color: #777;
+    font-size: 14px;
+}
+
+.clean-text {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #6f6f6f;
+    letter-spacing: 1px;
+}
+
+.promo {
+    margin: 15px;
+    padding: 15px;
+    background: linear-gradient(45deg,#ffc8dd,#cdb4db);
+    border-radius: 15px;
+    text-align: center;
+    color: white;
+}
+
+/* SEARCH */
+.search-box {
+    padding: 0 15px;
+    margin-bottom: 10px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 15px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    background: #fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 15px;
+    padding: 15px;
+}
+
+.card {
+    background: white;
+    border-radius: 20px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+}
+
+.card img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+button {
+    border: none;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: #cdb4db;
+    color: white;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+.cart {
+    background: white;
+    margin: 25px;
+    padding: 20px;
+    border-radius: 25px;
+}
+
+.cart-item {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    margin: 10px 0;
+}
+
+.cart-note {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 13px;
+    color: #6f6f6f;
+    letter-spacing: 1px;
+}
+
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #cdb4db;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.toast.show {
+    opacity: 1;
+}
+
+.receipt {
+    background: #fff;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 25px;
+    display: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<h1 class="gradient-text">🧸✨ Serena Stationery ✨🌸</h1>
+<p class="sub-gradient">Temukan alat tulis lucu yang bikin belajar jadi lebih menyenangkan ✨</p>
+<p class="clean-text">📷 @serena.stationery</p>
+<p class="clean-text">Simple • Clean • Aesthetic ✨</p>
+</div>
+
+<div class="promo">
+🎉 Diskon hingga 20% hari ini 🎉
+</div>
+
+<div class="search-box">
+<input type="text" id="search" placeholder="🔍 Cari produk..." onkeyup="searchProduk()">
+</div>
+
+<div class="container" id="produk"></div>
+
+<div class="cart">
+<h2>🛒 Keranjang</h2>
+<div id="cart-list"></div>
+<p>Total: Rp <span id="total">0</span></p>
+<button onclick="checkout()">Checkout</button>
+
+<p class="cart-note">
+📦 Terima kasih sudah berbelanja di @serena.stationery <br>
+Simple • Clean • Aesthetic ✨
+</p>
+</div>
+
+<div id="toast" class="toast">💖 Ditambahkan ke keranjang</div>
+
+<div class="receipt" id="receipt">
+<h3>✨ Serena Stationery ✨</h3>
+<p>Alat tulis aesthetic & lucu 💖</p>
+<p>Promo: Diskon hingga 20%</p>
+<p id="date"></p>
+<div id="receipt-list"></div>
+<p>Total: Rp <span id="receipt-total"></span></p>
+</div>
+
+<script>
+const produkList = [
+["Notebook Aesthetic",15000,"notebook.jpg"],
+["Stabilo Classic",8000,"stabilo.jpg"],
+["Bolpoin Gel Matte",3000,"bolpoin.jpg"],
+["Tempat Pensil",12000,"tempatpensil.jpg"],
+["Sticky Notes",5000,"sticky.jpg"],
+["Spidol Warna",12000,"spidol.jpg"],
+["Correction Tape",7000,"tipx.jpg"],
+["Penggaris",4000,"penggaris.jpg"],
+["Penghapus",1000,"penghapus.jpg"],
+["Pensil Kayu",2000,"pensil.jpg"],
+["Gantungan Lucu",8000,"gantungan.jpg"]
+];
+
+let cart=[];
+
+function formatRupiah(angka){
+return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+function renderProduk(list){
+let html="";
+list.forEach(p=>{
+html+=`
+<div class="card">
+<img src="${p[2]}">
+<h3>${p[0]}</h3>
+<p>Rp ${formatRupiah(p[1])}</p>
+<button onclick="addToCart('${p[0]}',${p[1]})">Tambah</button>
+</div>`;
+});
+document.getElementById("produk").innerHTML=html;
+}
+
+renderProduk(produkList);
+
+function searchProduk(){
+let keyword = document.getElementById("search").value.toLowerCase();
+let hasil = produkList.filter(p => p[0].toLowerCase().includes(keyword));
+renderProduk(hasil);
+}
+
+function showToast(){
+const toast=document.getElementById("toast");
+toast.classList.add("show");
+setTimeout(()=>{toast.classList.remove("show");},1500);
+}
+
+function addToCart(n,p){
+let item=cart.find(i=>i.name===n);
+if(item){item.qty++;}
+else{cart.push({name:n,price:p,qty:1});}
+renderCart();
+showToast();
+}
+
+function renderCart(){
+let html="";
+let total=0;
+
+cart.forEach((i,index)=>{
+total+=i.price*i.qty;
+
+html+=`
+<div class="cart-item">
+<div>${i.name}</div>
+<div>
+<button onclick="changeQty(${index},-1)">-</button>
+${i.qty}
+<button onclick="changeQty(${index},1)">+</button>
+</div>
+<div>Rp ${formatRupiah(i.price*i.qty)}</div>
+</div>`;
+});
+
+document.getElementById("cart-list").innerHTML=html;
+document.getElementById("total").innerText=formatRupiah(total);
+}
+
+function changeQty(i,c){
+cart[i].qty+=c;
+if(cart[i].qty<=0)cart.splice(i,1);
+renderCart();
+}
+
+function checkout(){
+let html="";
+let total=0;
+
+cart.forEach(i=>{
+total+=i.price*i.qty;
+html+=`${i.name} x ${i.qty} - Rp ${formatRupiah(i.price*i.qty)}<br>`;
+});
+
+document.getElementById("receipt-list").innerHTML=html;
+document.getElementById("receipt-total").innerText=formatRupiah(total);
+document.getElementById("date").innerText=new Date().toLocaleDateString("id-ID");
+document.getElementById("receipt").style.display="block";
+}
+</script>
+
+</body>
+</html>
